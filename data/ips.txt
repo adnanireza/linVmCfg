@@ -1,8 +1,6 @@
 #
-# First line is the master. The rest are slaves
-# Must at least be two lines
 # Lines starting with # are comments
 #
-mserv1       192.168.1.219
+#mserv1 192.168.1.219
 mserv7 192.168.1.134
 mserv8 192.168.1.144
