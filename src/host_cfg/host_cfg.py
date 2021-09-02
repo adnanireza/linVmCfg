@@ -3,14 +3,15 @@ import subprocess
 import os.path
 import os
 import re
+from shutil import copy, copyfile
 import util
-from launch_threads import launch_threads
 
-def host_bashrc_process(ips):
+
+def host_bashrc_process(name_and_ips):
     f = open(util.get_path("bashrc.in.tmp"), "r")
     lines = f.readlines()
     f.close()
-    for ip in ips:
+    for ip in name_and_ips:
         found = False
         for idx in range(len(lines)):
             if re.match(r'{}="\d+\.\d+\.\d+\.\d+'.format(ip[0]), lines[idx]):
@@ -25,7 +26,7 @@ def host_bashrc_process(ips):
     f.writelines(lines)
     f.close()
 
-def host_bashrc(ips):
+def host_bashrc(name_and_ips):
     # Copy (create if doesn't exist) bashrc file so python can modify
     run = subprocess.run("bash {} {} {}".format(util.get_path("copy_file.sh"), util.get_path("host_cfg_DIR"), "bashrc"),\
         universal_newlines = True,\
@@ -35,7 +36,7 @@ def host_bashrc(ips):
         util.failexit()
 
     # Process bashrc file
-    host_bashrc_process(ips)
+    host_bashrc_process(name_and_ips)
 
     # Copy bashrc back to home
     run = subprocess.run("bash {} {} {}".format(util.get_path("copy_file_back.sh"), util.get_path("host_cfg_DIR"), "bashrc"),\
@@ -92,7 +93,7 @@ def host_vimrc():
     os.remove(util.get_path("vimrc.in.tmp"))
     os.remove(util.get_path("vimrc.out.tmp"))
 
-def sshkey(ips):
+def sshkey(name_and_ips):
     # Generate ssh key if needed
     run = subprocess.run("bash {}".format(util.get_path("sshkey_gen.sh")),\
         universal_newlines = True, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
@@ -101,21 +102,16 @@ def sshkey(ips):
         util.failexit()
     
     # Send ssh key
-    def send(ip):
-        run = subprocess.run("bash {} {}".format(util.get_path("sshkey_send.sh"), ip),\
-            universal_newlines = True, stderr = subprocess.PIPE)
-        if run.returncode or run.stderr:
+    for ip in name_and_ips:
+        run = subprocess.run("bash {} {} {}".format(util.get_path("sshkey_send.sh"), ip[1],\
+            util.conv_path_win2lin(util.get_path("session.pub"))), universal_newlines = True)
+        if run.returncode:
             print(run.stderr)
             util.failexit()
-            
+    # print("Attempted to send ssh key. Press a key to continue or CTRL+C to exit...")
+    # input()
 
-    def dispatch_param(idx):
-        return (ips[idx][1],)
-
-    launch_threads(function = send, dispatch_param = dispatch_param, num_threads = len(ips))
-
-
-def host_cfg(ips):
-    host_bashrc(ips)
+def host_cfg(name_and_ips):
+    host_bashrc(name_and_ips)
     host_vimrc()
-    sshkey(ips)
+    sshkey(name_and_ips)

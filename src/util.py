@@ -1,4 +1,5 @@
 import os.path
+import re
 
 def failexit(exit_code = -1):
     print("Exiting...")
@@ -7,9 +8,29 @@ def failexit(exit_code = -1):
 def get_rootdir():
     return os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 
+def conv_path_win2lin(winpath):
+    "Applies for mobaxterm terminal only"
+    # print("WIN: " + winpath)
+    linpath = re.sub(r":", "", winpath)
+    linpath = r"/drives/" + re.sub(r"\\", r"/", linpath)
+    return linpath.lower()
+    # print("LIN: " + linpath)
+
 def get_path(item):
     if item == "ips.txt":
-        return os.path.join(get_rootdir(), "data", "ips.txt")
+        return os.path.join("C:\\", "Mithun", "computers", "linux", "secrets", "vm_ips", "ips.txt")
+    if item == "session":
+        return os.path.join("C:\\", "Mithun", "computers", "linux", "secrets", "mobaxterm_session_keys", "session")
+    if item == "session.pub":
+        return os.path.join("C:\\", "Mithun", "computers", "linux", "secrets", "mobaxterm_session_keys", "session.pub")
+    if item == "terminal":
+        return os.path.join("C:\\", "Mithun", "computers", "linux", "secrets", "mobaxterm_terminal_keys", "terminal")
+    if item == "terminal.pub":
+        return os.path.join("C:\\", "Mithun", "computers", "linux", "secrets", "mobaxterm_terminal_keys", "terminal.pub")
+    if item == "data":
+        return os.path.join(get_rootdir(), "data")
+    elif item == "remote_script":
+        return os.path.join(get_rootdir(), "src", "remote_script")
     elif item == "vimrc.txt":
         return os.path.join(get_rootdir(), "data", "vimrc.txt")
     elif item == "host_cfg_DIR":
@@ -32,6 +53,8 @@ def get_path(item):
         return os.path.join(get_rootdir(), "src", "host_cfg", "sshkey_gen.sh")
     elif item == "sshkey_send.sh":
         return os.path.join(get_rootdir(), "src", "host_cfg", "sshkey_send.sh")
-    
+    elif item == "my_scp.sh":
+        return os.path.join(get_rootdir(), "src", "remote_cfg", "my_scp.sh")
+
     print("Can't find path for " + item)
     failexit()
