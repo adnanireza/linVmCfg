@@ -22,5 +22,5 @@ def add_line(orig_lines, new_lines):
                 break
         if not found:
             orig_lines.append('\r\n' + new_line if system().lower() == "windows" else '\n' + new_line.rstrip("\r"))
-    if not system().lower() == "windows":
+    if not found and not system().lower() == "windows":
         orig_lines.append("\n")
