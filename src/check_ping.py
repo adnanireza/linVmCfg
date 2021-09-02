@@ -1,7 +1,7 @@
 import subprocess
 import re
 from platform import system
-from launch_threads import launch_threads
+from common.launch_threads import launch_threads
 from util import failexit
 
 def check_output(outp):

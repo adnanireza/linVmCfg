@@ -13,7 +13,9 @@ path_dict = {
     "vimrc.txt" : os.path.join(rootdir(), "data", "vimrc.txt"),
     "ips.txt" : os.path.join(rootdir(), "data", "ips.txt"),
     ".bashrc" : os.path.join("/", "home", "mith", ".bashrc"),
-    ".vimrc" : os.path.join("/", "home", "mith", ".vimrc")
+    ".vimrc" : os.path.join("/", "home", "mith", ".vimrc"),
+    "id_ecdsa" : os.path.join("/", "home", "mith", ".ssh", "id_ecdsa"),
+    "id_ecdsa.pub" : os.path.join("/", "home", "mith", ".ssh", "id_ecdsa.pub")
 }
 
 def path(path):

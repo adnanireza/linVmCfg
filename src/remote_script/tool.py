@@ -1,4 +1,6 @@
 import subprocess
+import paramiko
+from remote_script.init import *
 from remote_script.log import *
 
 def bash(cmd):
@@ -11,12 +13,30 @@ def bash(cmd):
     log_debug("command output: " + run.stdout)
     return run.stdout
 
-# def get_my_ip():
-#     global my_ip
-#     my_ip = bash(r"hostname -I | awk '{print $1}'")
-#     log_debug("Fetched my_ip = " + my_ip)
+def ssh_open(ip, passwd):
+    try:
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(hostname = ip, username = "mith", password = passwd)
+    except paramiko.ssh_exception.AuthenticationException as err:
+        log_error("Authentication failure")
+        log_error(err)
+        error_exit()
+    return ssh
 
-# def get_my_name():
-#     global my_name
-#     my_name = bash(r'hostname')
-#     log_debug("Fetched my_name = " + my_name)
+def ssh_exec(cmd, ssh):
+    stdin, stdout, stderr = ssh.exec_command(cmd)
+    err_message = stderr.read()
+    if (err_message):
+        log_error("Output:<<<")
+        log_error(stdout.read().decode("ascii"))
+        log_error(">>>:Output")
+        log_error("ERROR:<<<".format(my_ip, my_name))
+        log_error(err_message.decode("ascii"))
+        log_error(">>>:ERROR")
+        log_error("Failed to execute command <{}> files to {} [{}]".format(cmd, my_ip, my_name))
+        error_exit()
+    return stdout.read().decode("ascii")
+
+def ssh_close(ssh):
+    ssh.close()

@@ -31,8 +31,12 @@ def get_path(item):
         return os.path.join(get_rootdir(), "data")
     elif item == "remote_script":
         return os.path.join(get_rootdir(), "src", "remote_script")
-    elif item == "vm_cfg.py":
-        return os.path.join(get_rootdir(), "src", "remote_script", "vm_cfg.py")
+    elif item == "vm_cfg_1.py":
+        return os.path.join(get_rootdir(), "src", "remote_script", "vm_cfg_1.py")
+    elif item == "vm_cfg_2.py":
+        return os.path.join(get_rootdir(), "src", "remote_script", "vm_cfg_2.py")
+    elif item == "remote_vm.py":
+        return os.path.join(get_rootdir(), "src", "remote_script", "remote_vm.py")
     elif item == "vimrc.txt":
         return os.path.join(get_rootdir(), "data", "vimrc.txt")
     elif item == "host_cfg_DIR":
@@ -60,5 +64,7 @@ def get_path(item):
     elif item == "common":
         return os.path.join(get_rootdir(), "src", "common")
 
+    import traceback
+    print(traceback.extract_stack(None, 2))
     print("Can't find path for " + item)
     failexit()

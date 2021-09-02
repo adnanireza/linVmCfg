@@ -97,4 +97,4 @@ def sshkey(name_and_ips):
 def host_cfg(name_and_ips):
     host_bashrc(name_and_ips)
     host_vimrc()
-    # sshkey(name_and_ips)
+    sshkey(name_and_ips)
