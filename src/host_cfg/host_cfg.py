@@ -5,23 +5,13 @@ import os
 import re
 from shutil import copy, copyfile
 import util
-
+import sys
+from common import text_processing
 
 def host_bashrc_process(name_and_ips):
     f = open(util.get_path("bashrc.in.tmp"), "r")
-    lines = f.readlines()
+    lines = text_processing.bashrc_processing(name_and_ips, f.readlines())
     f.close()
-    for ip in name_and_ips:
-        found = False
-        for idx in range(len(lines)):
-            if re.match(r'{}="\d+\.\d+\.\d+\.\d+'.format(ip[0]), lines[idx]):
-                print(lines[idx])
-                lines[idx] = re.sub(r'\d+\.\d+\.\d+\.\d+', ip[1], lines[idx])
-                print(lines[idx])
-                found = True
-                break
-        if not found:
-            lines.append('\r\n{}="{}"'.format(ip[0], ip[1]))
     f = open(util.get_path("bashrc.out.tmp"), "w")
     f.writelines(lines)
     f.close()
@@ -57,14 +47,7 @@ def host_vimrc_process():
     f = open(util.get_path("vimrc.txt"), "r")
     new_lines = f.readlines()
     f.close()
-    for new_line in new_lines:
-        found = False
-        for idx in range(len(vimrc_lines)):
-            if new_line == vimrc_lines[idx]:
-                found = True
-                break
-        if not found:
-            vimrc_lines.append(new_line)
+    text_processing.add_line(vimrc_lines, new_lines)
     f = open(util.get_path("vimrc.out.tmp"), "w")
     f.writelines(vimrc_lines)
     f.close()
@@ -114,4 +97,4 @@ def sshkey(name_and_ips):
 def host_cfg(name_and_ips):
     host_bashrc(name_and_ips)
     host_vimrc()
-    sshkey(name_and_ips)
+    # sshkey(name_and_ips)

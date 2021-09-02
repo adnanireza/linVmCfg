@@ -31,6 +31,8 @@ def get_path(item):
         return os.path.join(get_rootdir(), "data")
     elif item == "remote_script":
         return os.path.join(get_rootdir(), "src", "remote_script")
+    elif item == "vm_cfg.py":
+        return os.path.join(get_rootdir(), "src", "remote_script", "vm_cfg.py")
     elif item == "vimrc.txt":
         return os.path.join(get_rootdir(), "data", "vimrc.txt")
     elif item == "host_cfg_DIR":
@@ -55,6 +57,8 @@ def get_path(item):
         return os.path.join(get_rootdir(), "src", "host_cfg", "sshkey_send.sh")
     elif item == "my_scp.sh":
         return os.path.join(get_rootdir(), "src", "remote_cfg", "my_scp.sh")
+    elif item == "common":
+        return os.path.join(get_rootdir(), "src", "common")
 
     print("Can't find path for " + item)
     failexit()
