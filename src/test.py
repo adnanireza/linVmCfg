@@ -1,21 +1,17 @@
 from getips import getips
 from check_ping import check_ping
 from host_cfg import host_cfg
-from remote_cfg import remote_cfg
-import util
-import subprocess
+import remote_cfg
 
-from shutil import copyfile
-import os
-
-# import logging
-# logging.basicConfig(format = '[myipError(myname)] %(levelname)s: %(message)s', level = logging.INFO)
-# logging.error("Hi! error")
-# logging.info("infoooo")
-# exit()
-
+# Get list of hostname and ip from text file
 name_and_ips = getips()
- # check_ping(list(map(lambda x : x[1], name_and_ips)))
-host_cfg.host_cfg(name_and_ips)
+
+# # Ping each one to see if connected
+# check_ping(list(map(lambda x : x[1], name_and_ips)))
+
+# # Configure host: bashrc, vimrc, ssh
+# host_cfg.host_cfg(name_and_ips)
+
+#Configure VMs: send files, run commands to setup their bashrc, ssh etc
 remote_cfg.remote_cfg(name_and_ips)
-# print(name_and_ips)
+

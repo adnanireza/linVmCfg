@@ -2,7 +2,7 @@ import re
 from platform import system
 
 def bashrc_processing(name_and_ips, lines):
-    for (name, ip) in name_and_ips:
+    for (name, ip, not_used) in name_and_ips:
         found = False
         for idx in range(len(lines)):
             if re.match(r'{}="\d+\.\d+\.\d+\.\d+'.format(name), lines[idx]):

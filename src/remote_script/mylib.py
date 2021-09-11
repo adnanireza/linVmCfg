@@ -7,6 +7,10 @@ from remote_script import path
 from common import get_name_and_ips, text_processing
 from remote_script.tool import bash
 
+def is_public(ip, name_and_ips):
+    #Check if I am public or private ip
+    return list(filter(lambda x : ip == x[1], name_and_ips))[0][2] == "public"
+
 def get_other_ips(name_and_ips):
     other_ips = list(filter(lambda x : x[1] != my_ip, name_and_ips))
     log_debug("Other IPs: " + str(other_ips))

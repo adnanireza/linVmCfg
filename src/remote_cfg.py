@@ -49,17 +49,17 @@ def remote_cfg(name_and_ips):
         ssh_close(ssh)
 
     def dispatch_param_1(idx):
-        return name_and_ips[idx]
+        return (name_and_ips[idx][0], name_and_ips[idx][1])
 
     # First send all files, and start kick off the first script
     launch_threads(function = send, dispatch_param = dispatch_param_1, num_threads = len(name_and_ips))
-    
+
     # Finally take password and kick off the second script
     print("Please enter VM password: ")
     passwd = getpass.getpass()
 
     def dispatch_param_2(idx):
-        return name_and_ips[idx] + (passwd,)
+        return (name_and_ips[idx][0], name_and_ips[idx][1], passwd)
 
     def run(name, ip, passwd):
         ssh = ssh_open(ip)

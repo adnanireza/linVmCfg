@@ -21,6 +21,8 @@ pubkey = f.readlines()[0]
 f.close()
 
 def ssh_copy(name, ip):
+    if mylib.is_public(my_ip, name_and_ips) and not mylib.is_public(ip, name_and_ips):
+        return
     ssh = tool.ssh_open(ip, passwd)
     cmd = 'python3 /home/mith/.cfg/remote_vm.py {}'.format(pubkey)
     log_debug("Sending ssp copy command to {}({})".format(ip, name))
@@ -31,7 +33,7 @@ def ssh_copy(name, ip):
     tool.ssh_close(ssh)
 
 def dispatch_param(idx):
-    return name_and_ips[idx]
+    return (name_and_ips[idx][0], name_and_ips[idx][1])
 
 # Dispatch threads to send public key to all other VMs
 launch_threads(function = ssh_copy, dispatch_param = dispatch_param, num_threads = len(name_and_ips))
